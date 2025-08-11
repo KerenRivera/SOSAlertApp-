@@ -48,5 +48,14 @@ namespace SOS_Alert_App.Controllers
             return RedirectToAction(nameof(Index));
         }
 
+        public IActionResult History()
+        {
+            var logs = _context.AlertLogs
+                .Include(a => a.Contact)
+                .OrderByDescending(a => a.SentAt)
+                .ToList();
+            return View(logs);
+        }
+
     }
 }
