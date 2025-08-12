@@ -5,18 +5,18 @@ using SOS_Alert_App.Models;
 
 namespace SOS_Alert_App.Controllers
 {
-    public class SOSController1 : Controller
+    public class AlertsController : Controller
     {
         private readonly AppDbContext _context;
 
-        public SOSController1(AppDbContext context)
+        public AlertsController(AppDbContext context)
         {
             _context = context;
         }
         public IActionResult Index()
         {
             var contacts = _context.Contacts.ToList();
-            return View();
+            return View(contacts);
         }
 
         [HttpPost]

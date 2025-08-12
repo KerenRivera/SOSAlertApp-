@@ -1,10 +1,10 @@
 ﻿@model IEnumerable<SOS_Alert_App.Models.Contact>
 
 @{
-    ViewData["Title"] = "SOS Alert";
+    ViewData["Title"] = "Alerta SOS";
 }
 
-<h1 class="text-center text-danger"> Alerta SOS</h1>
+<h1 class="text-center text-danger"> Alerta de Emergencia</h1>
 
 @if (TempData["Success"] != null)
 {
@@ -47,7 +47,7 @@ else
     </table>
 }
 
-<a href="/SOS/History" class="btn btn-secondary">View History</a>
+<a href="/Alerts/History" class="btn btn-secondary">View History</a>
 
 <script>
     function setLocation(contactId) {
