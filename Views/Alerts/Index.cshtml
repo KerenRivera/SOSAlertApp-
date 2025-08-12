@@ -1,19 +1,23 @@
 ﻿@model IEnumerable<SOS_Alert_App.Models.Contact>
-
 @{
-    ViewData["Title"] = "Alerta SOS";
+    ViewData["Title"] = "SOS Alert";
 }
 
-<h1 class="text-center text-danger"> Alerta de Emergencia</h1>
+<h1 class="text-center text-danger">Alerta de Emergencia</h1>
 
 @if (TempData["Success"] != null)
 {
     <div class="alert alert-success">@TempData["Success"]</div>
 }
 
+@if (TempData["Error"] != null)
+{
+    <div class="alert alert-danger">@TempData["Error"]</div>
+}
+
 @if (!Model.Any())
 {
-    <p>No contacts available. <a href="/Contacts/Create">Agrega uno aqui</a></p>
+    <p>No hay contactos disponibles. <a href="/Contacts/Create">Agrega uno aqui</a></p>
 }
 else
 {
@@ -34,10 +38,10 @@ else
                     <td>@contact.Email</td>
                     <td>@contact.Phone</td>
                     <td>
-                        <form method="post" asp-action="SendAlert" asp-route-contactId="@contact.Id">
-                            <input type="hidden" name="location" id="loc_@contact.Id" />
-                            <button type="submit" class="btn btn-danger btn-lg" onclick="setLocation(@contact.Id)">
-                                Send SOS
+                        <form method="post" asp-action="SendAlert" asp-route-contactId="@contact.Id" id="form_@contact.Id">
+                            <input type="hidden" name="location" id="location_@contact.Id" />
+                            <button type="button" class="btn btn-danger btn-lg" onclick="sendSOSWithLocation(@contact.Id)">
+                                Enviar SOS
                             </button>
                         </form>
                     </td>
@@ -47,57 +51,54 @@ else
     </table>
 }
 
-<a href="/Alerts/History" class="btn btn-secondary">View History</a>
+<a href="/Alerts/History" class="btn btn-secondary">Ver historial</a>
 
 <script>
-    function setLocation(contactId) {
+    function sendSOSWithLocation(contactId) {
+
+        const button = document.querySelector(`button[onclick="sendSOSWithLocation(${contactId})"]`);
+        const originalText = button.textContent;
+        button.textContent = "Getting location...";
+        button.disabled = true;
+
         if (navigator.geolocation) {
-            navigator.geolocation.getCurrentPosition(pos => {
-                document.getElementById(loc_$,{contactId}).value =
-                    $;{pos.coords.latitude}, $,{pos.coords.longitude};
-            });
+            navigator.geolocation.getCurrentPosition(
+                function(position) {
+                    // Éxito - obtener coordenadas
+                    const lat = position.coords.latitude;
+                    const lng = position.coords.longitude;
+                    const location = `${lat}, ${lng}`;
+
+                    // Poner la ubicación en el campo hidden
+                    document.getElementById(`location_${contactId}`).value = location;
+
+                    // Enviar el formulario
+                    document.getElementById(`form_${contactId}`).submit();
+                },
+                function(error) {
+                    // Error o usuario negó el permiso
+                    console.log("Geolocation error:", error);
+
+                    // Restaurar botón y enviar sin ubicación
+                    button.textContent = originalText;
+                    button.disabled = false;
+
+                    document.getElementById(`location_${contactId}`).value = "Ubicación no disponible";
+                    document.getElementById(`form_${contactId}`).submit();
+                },
+                {
+                    enableHighAccuracy: true,
+                    timeout: 10000,
+                    maximumAge: 60000
+                }
+            );
+        } else {
+            // Navegador no soporta geolocalización
+            button.textContent = originalText;
+            button.disabled = false;
+
+            document.getElementById(`location_${contactId}`).value = "Geolocalización no soportada";
+            document.getElementById(`form_${contactId}`).submit();
         }
     }
 </script>
-
-
-@* <p>
-    <a asp-action="Create">Create New</a>
-</p>
-<table class="table">
-    <thead>
-        <tr>
-            <th>
-                @Html.DisplayNameFor(model => model.Name)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Email)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Phone)
-            </th>
-            <th></th>
-        </tr>
-    </thead>
-    <tbody>
-@foreach (var item in Model) {
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.Name)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Email)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Phone)
-            </td>
-            <td>
-                <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
-                <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
-                <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
-            </td>
-        </tr>
-}
-    </tbody>
-</table>
- *@
