@@ -1,0 +1,103 @@
+﻿@model IEnumerable<SOS_Alert_App.Models.Contact>
+
+@{
+    ViewData["Title"] = "SOS Alert";
+}
+
+<h1 class="text-center text-danger"> Alerta SOS</h1>
+
+@if (TempData["Success"] != null)
+{
+    <div class="alert alert-success">@TempData["Success"]</div>
+}
+
+@if (!Model.Any())
+{
+    <p>No contacts available. <a href="/Contacts/Create">Agrega uno aqui</a></p>
+}
+else
+{
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th>Contact Name</th>
+                <th>Email</th>
+                <th>Phone</th>
+                <th>Action</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var contact in Model)
+            {
+                <tr>
+                    <td>@contact.Name</td>
+                    <td>@contact.Email</td>
+                    <td>@contact.Phone</td>
+                    <td>
+                        <form method="post" asp-action="SendAlert" asp-route-contactId="@contact.Id">
+                            <input type="hidden" name="location" id="loc_@contact.Id" />
+                            <button type="submit" class="btn btn-danger btn-lg" onclick="setLocation(@contact.Id)">
+                                Send SOS
+                            </button>
+                        </form>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+
+<a href="/SOS/History" class="btn btn-secondary">View History</a>
+
+<script>
+    function setLocation(contactId) {
+        if (navigator.geolocation) {
+            navigator.geolocation.getCurrentPosition(pos => {
+                document.getElementById(loc_$,{contactId}).value =
+                    $;{pos.coords.latitude}, $,{pos.coords.longitude};
+            });
+        }
+    }
+</script>
+
+
+@* <p>
+    <a asp-action="Create">Create New</a>
+</p>
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.Name)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Email)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Phone)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model) {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.Name)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Email)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Phone)
+            </td>
+            <td>
+                <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
+                <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
+                <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
+            </td>
+        </tr>
+}
+    </tbody>
+</table>
+ *@

@@ -1,0 +1,36 @@
+﻿@model IEnumerable<AlertLog>
+
+@{
+    ViewData["Title"] = "Alert History";
+}
+
+<h1 class="text-center">📜 Alert History</h1>
+
+@if (!Model.Any())
+{
+    <p>No alerts sent yet.</p>
+}
+else
+{
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th>Contact</th>
+                <th>Message</th>
+                <th>Date</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var alert in Model)
+            {
+                <tr>
+                    <td>@alert.Contact.Name</td>
+                    <td>@alert.Message</td>
+                    <td>@alert.SentAt.ToString("g")</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+
+<a href="/SOS" class="btn btn-primary">Back to SOS</a>

@@ -1,4 +1,4 @@
-﻿namespace SOS_Alert_App.Models
+﻿  namespace SOS_Alert_App.Models
 {
     public class AlertLog
     {
