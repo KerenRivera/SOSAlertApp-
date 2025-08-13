@@ -1,17 +1,115 @@
 ﻿@{
     ViewData["Title"] = "Página de Inicio";
 }
-<div class="text-center">
-    <h1>SOS Alert App</h1>
+
+<div class="home-hero">
+    <div class="hero-content">
+        <div class="row align-items-center">
+            <div class="col-lg-7">
+                <h1 class="hero-title">
+                    <i class="fas fa-shield-alt me-3"></i>
+                    SOS Alert App
+                </h1>
+                <h2 class="hero-subtitle">Tu Seguridad Personal, Siempre Contigo</h2>
+
+                <p class="hero-description">
+                    SOS Alert App es tu compañero de seguridad personal las 24 horas. Diseñada para situaciones de emergencia,
+                    esta aplicación web te permite gestionar una lista de contactos de confianza y, con solo presionar el botón SOS,
+                    enviar automáticamente un mensaje de alerta junto con tu ubicación exacta a todas las personas que has designado
+                    como tus contactos de emergencia. Tu seguridad es nuestra prioridad, y con SOS Alert App, la ayuda estará
+                    siempre a un toque de distancia.
+                </p>
+
+                <div class="hero-actions">
+                    <a asp-controller="Contacts" asp-action="Index" class="btn btn-primary-custom btn-lg">
+                        <i class="fas fa-users me-2"></i>
+                        Gestionar Contactos
+                    </a>
+                    <a asp-controller="Alerts" asp-action="Index" class="btn btn-danger-custom btn-lg">
+                        <i class="fas fa-exclamation-triangle me-2"></i>
+                        Enviar Alerta
+                    </a>
+                </div>
+            </div>
+
+            <div class="col-lg-5 text-center">
+                <div class="sos-demo">
+                    <div class="sos-button-demo">
+                        <i class="fas fa-exclamation-triangle"></i>
+                        <span>SOS</span>
+                    </div>
+                    <p class="demo-text">Un toque para alertar a tus contactos</p>
+                </div>
+            </div>
+        </div>
+    </div>
 </div>
-<div class="row"></div>
-<div class="col-md-4">
-    <h2>Bienvenido a SOS Alert App</h2>
-    <p>
-        SOS Alert App es tu compañero de seguridad personal las 24 horas. Diseñada para situaciones de emergencia,
-        esta aplicación web te permite gestionar una lista de contactos de confianza y, con solo presionar el botón SOS,
-        enviar automáticamente un mensaje de alerta junto con tu ubicación exacta a todas las personas que has designado
-        como tus contactos de emergencia. Tu seguridad es nuestra prioridad, y con SOS Alert App, la ayuda estará
-        siempre a un toque de distancia.
-    </p>
+
+<div class="features-section">
+    <div class="container">
+        <h2 class="section-title text-center">¿Por qué elegir SOS Alert App?</h2>
+
+        <div class="row">
+            <div class="col-md-4">
+                <div class="feature-card-home">
+                    <div class="feature-icon-home">
+                        <i class="fas fa-clock"></i>
+                    </div>
+                    <h3>Disponible 24/7</h3>
+                    <p>Tu seguridad no tiene horarios. SOS Alert App está disponible las 24 horas del día, los 7 días de la semana.</p>
+                </div>
+            </div>
+
+            <div class="col-md-4">
+                <div class="feature-card-home">
+                    <div class="feature-icon-home">
+                        <i class="fas fa-map-marker-alt"></i>
+                    </div>
+                    <h3>Ubicación Precisa</h3>
+                    <p>Envía automáticamente tu ubicación GPS exacta para que la ayuda pueda encontrarte rápidamente.</p>
+                </div>
+            </div>
+
+            <div class="col-md-4">
+                <div class="feature-card-home">
+                    <div class="feature-icon-home">
+                        <i class="fas fa-bolt"></i>
+                    </div>
+                    <h3>Respuesta Inmediata</h3>
+                    <p>Un solo toque activa el sistema y notifica instantáneamente a todos tus contactos de emergencia.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="stats-section-home">
+    <div class="container">
+        <div class="row text-center">
+            <div class="col-md-3">
+                <div class="stat-item">
+                    <div class="stat-number-home">&lt;5s</div>
+                    <div class="stat-label-home">Tiempo de Respuesta</div>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="stat-item">
+                    <div class="stat-number-home">24/7</div>
+                    <div class="stat-label-home">Disponibilidad</div>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="stat-item">
+                    <div class="stat-number-home">100%</div>
+                    <div class="stat-label-home">Confiabilidad</div>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="stat-item">
+                    <div class="stat-number-home">∞</div>
+                    <div class="stat-label-home">Contactos</div>
+                </div>
+            </div>
+        </div>
+    </div>
 </div>

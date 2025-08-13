@@ -1,44 +1,70 @@
 @model SOS_Alert_App.Models.Contact
-
 @{
-    ViewData["Title"] = "Edit";
+    ViewData["Title"] = "Editar Contacto";
 }
 
-<h1>Editar</h1>
+<div class="main-container">
+    <div class="text-center mb-4">
+        <h1 class="page-title">
+            <i class="fas fa-user-edit me-3"></i>
+            Editar Contacto
+        </h1>
+        <p class="page-subtitle">
+            Modifica la información de tu contacto de emergencia
+        </p>
+    </div>
 
-<h4>Contacto</h4>
-<hr />
-<div class="row">
-    <div class="col-md-4">
-        <form asp-action="Edit">
-            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            <input type="hidden" asp-for="Id" />
-            <div class="form-group">
-                <label asp-for="Name" class="control-label"></label>
-                <input asp-for="Name" class="form-control" />
-                <span asp-validation-for="Name" class="text-danger"></span>
+    <div class="row justify-content-center">
+        <div class="col-md-6">
+            <div class="form-card">
+                <form asp-action="Edit">
+                    <div asp-validation-summary="ModelOnly" class="alert alert-danger"></div>
+                    <input type="hidden" asp-for="Id" />
+
+                    <div class="form-floating mb-3">
+                        <input asp-for="Name" class="form-control" placeholder="Nombre completo" />
+                        <label asp-for="Name" class="form-label">
+                            <i class="fas fa-user me-2"></i>Nombre completo
+                        </label>
+                        <span asp-validation-for="Name" class="text-danger"></span>
+                    </div>
+
+                    <div class="form-floating mb-3">
+                        <input asp-for="Email" class="form-control" placeholder="correo@ejemplo.com" />
+                        <label asp-for="Email" class="form-label">
+                            <i class="fas fa-envelope me-2"></i>Correo electrónico
+                        </label>
+                        <span asp-validation-for="Email" class="text-danger"></span>
+                    </div>
+
+                    <div class="form-floating mb-4">
+                        <input asp-for="Phone" class="form-control" placeholder="Teléfono" />
+                        <label asp-for="Phone" class="form-label">
+                            <i class="fas fa-phone me-2"></i>Número de teléfono
+                        </label>
+                        <span asp-validation-for="Phone" class="text-danger"></span>
+                    </div>
+
+                    <div class="d-grid gap-2">
+                        <button type="submit" class="btn btn-primary btn-lg">
+                            <i class="fas fa-save me-2"></i>
+                            Guardar Cambios
+                        </button>
+                        <a asp-action="Index" class="btn btn-outline-secondary">
+                            <i class="fas fa-arrow-left me-2"></i>
+                            Volver a la Lista
+                        </a>
+                    </div>
+                </form>
             </div>
-            <div class="form-group">
-                <label asp-for="Email" class="control-label"></label>
-                <input asp-for="Email" class="form-control" />
-                <span asp-validation-for="Email" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="Phone" class="control-label"></label>
-                <input asp-for="Phone" class="form-control" />
-                <span asp-validation-for="Phone" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <input type="submit" value="Save" class="btn btn-primary" />
-            </div>
-        </form>
+        </div>
     </div>
 </div>
 
-<div>
-    <a asp-action="Index">Volver a la Lista</a>
-</div>
-
 @section Scripts {
-    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
 }
+
+

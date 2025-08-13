@@ -1,36 +1,165 @@
 ﻿@model IEnumerable<AlertLog>
-
 @{
-    ViewData["Title"] = "Alert History";
+    ViewData["Title"] = "Historial de Alertas";
 }
 
-<h1 class="text-center">Historial de Alertas</h1>
+<div class="main-container">
+    <div class="text-center mb-4">
+        <h1 class="page-title">
+            <i class="fas fa-history me-3"></i>
+            Historial de Alertas
+        </h1>
+        <p class="page-subtitle">
+            Revisa todas las alertas de emergencia que has enviado
+        </p>
+    </div>
 
-@if (!Model.Any())
-{
-    <p>Aun no hay alertas enviadas.</p>
-}
-else
-{
-    <table class="table table-striped">
-        <thead>
-            <tr>
-                <th>Contact</th>
-                <th>Message</th>
-                <th>Date</th>
-            </tr>
-        </thead>
-        <tbody>
-            @foreach (var alert in Model)
-            {
-                <tr>
-                    <td>@alert.Contact.Name</td>
-                    <td>@alert.Message</td>
-                    <td>@alert.SentAt.ToString("g")</td>
-                </tr>
-            }
-        </tbody>
-    </table>
-}
+    @if (!Model.Any())
+    {
+        <div class="empty-history-state">
+            <div class="empty-icon">
+                <i class="fas fa-bell-slash"></i>
+            </div>
+            <h3>No hay alertas registradas</h3>
+            <p>Aún no has enviado ninguna alerta de emergencia. Esperamos que nunca tengas que usarla, pero está aquí cuando la necesites.</p>
+            
+            <div class="empty-actions">
+                <a asp-controller="Alerts" asp-action="Index" class="btn btn-primary-custom btn-lg">
+                    <i class="fas fa-exclamation-triangle me-2"></i>
+                    Ir a Alertas
+                </a>
+                <a asp-controller="Contacts" asp-action="Index" class="btn btn-outline-primary btn-lg">
+                    <i class="fas fa-users me-2"></i>
+                    Gestionar Contactos
+                </a>
+            </div>
+        </div>
+    }
+    else
+    {
+        <!-- Stats de historial -->
+        <div class="history-stats">
+            <div class="row">
+                <div class="col-md-4">
+                    <div class="stat-card">
+                        <div class="stat-number">@Model.Count()</div>
+                        <div class="stat-label">Total de Alertas</div>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="stat-card">
+                        <div class="stat-number">@Model.GroupBy(x => x.Contact.Name).Count()</div>
+                        <div class="stat-label">Contactos Alertados</div>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="stat-card">
+                        <div class="stat-number">@Model.Where(x => x.SentAt.Date == DateTime.Today).Count()</div>
+                        <div class="stat-label">Alertas Hoy</div>
+                    </div>
+                </div>
+            </div>
+        </div>
 
-<a href="/Alerts" class="btn btn-primary">Volver a Alertas</a>
+        <!-- Tabla de historial -->
+        <div class="history-table">
+            <table class="table table-hover mb-0">
+                <thead class="table-header">
+                    <tr>
+                        <th><i class="fas fa-user me-2"></i>Contacto</th>
+                        <th><i class="fas fa-comment me-2"></i>Mensaje</th>
+                        <th><i class="fas fa-calendar me-2"></i>Fecha y Hora</th>
+                        <th><i class="fas fa-info-circle me-2"></i>Estado</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var alert in Model.OrderByDescending(x => x.SentAt))
+                    {
+                        <tr class="history-row">
+                            <td class="contact-cell">
+                                <div class="contact-avatar-small">
+                                    <i class="fas fa-user"></i>
+                                </div>
+                                <div class="contact-details">
+                                    <div class="contact-name">@alert.Contact.Name</div>
+                                    <div class="contact-info-small">@alert.Contact.Phone</div>
+                                </div>
+                            </td>
+                            <td class="message-cell">
+                                <div class="message-preview">
+                                    @if (alert.Message.Length > 50)
+                                    {
+                                        <span>@alert.Message.Substring(0, 50)...</span>
+                                        <button class="btn btn-sm btn-link p-0 ms-1" data-bs-toggle="tooltip" data-bs-title="@alert.Message">
+                                            <i class="fas fa-eye"></i>
+                                        </button>
+                                    }
+                                    else
+                                    {
+                                        @alert.Message
+                                    }
+                                </div>
+                            </td>
+                            <td class="date-cell">
+                                <div class="date-info">
+                                    <div class="date-primary">@alert.SentAt.ToString("dd/MM/yyyy")</div>
+                                    <div class="time-secondary">@alert.SentAt.ToString("HH:mm")</div>
+                                </div>
+                            </td>
+                            <td class="status-cell">
+                                <span class="status-badge status-sent">
+                                    <i class="fas fa-check-circle me-1"></i>
+                                    Enviado
+                                </span>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+
+        <!-- Acciones del historial para implementar mas adelante 
+        <div class="history-actions">
+            <div class="row">
+                <div class="col-md-6">
+                    <button class="btn btn-outline-primary btn-lg w-100">
+                        <i class="fas fa-download me-2"></i>
+                        Exportar Historial
+                    </button>
+                </div>
+                <div class="col-md-6">
+                    <button class="btn btn-outline-danger btn-lg w-100" onclick="confirmClearHistory()">
+                        <i class="fas fa-trash me-2"></i>
+                        Limpiar Historial
+                    </button>
+                </div>
+            </div>
+        </div>
+        --> 
+    }
+
+    <!-- Botón para volver -->
+    <div class="text-center mt-4">
+        <a asp-controller="Alerts" asp-action="Index" class="btn btn-secondary btn-lg">
+            <i class="fas fa-arrow-left me-2"></i>
+            Volver a Alertas
+        </a>
+    </div>
+</div>
+
+<script>
+@* function confirmClearHistory() {
+    if (confirm('¿Estás seguro de que quieres limpiar todo el historial? Esta acción no se puede deshacer.')) {
+        // Aquí irías a una acción del controlador para limpiar
+        alert('Función de limpiar historial - implementar en el controlador');
+    }
+} *@
+
+// Inicializar tooltips para mensajes largos
+document.addEventListener('DOMContentLoaded', function() {
+    var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'));
+    var tooltipList = tooltipTriggerList.map(function(tooltipTriggerEl) {
+        return new bootstrap.Tooltip(tooltipTriggerEl);
+    });
+});
+</script>

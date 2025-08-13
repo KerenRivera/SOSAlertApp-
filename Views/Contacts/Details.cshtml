@@ -1,36 +1,83 @@
 @model SOS_Alert_App.Models.Contact
-
 @{
-    ViewData["Title"] = "Details";
+    ViewData["Title"] = "Detalles del Contacto";
 }
 
-<h1>Detalles</h1>
+<div class="main-container">
+    <div class="text-center mb-4">
+        <h1 class="page-title">
+            <i class="fas fa-address-card me-3"></i>
+            Detalles del Contacto
+        </h1>
+        <p class="page-subtitle">
+            Información completa del contacto de emergencia
+        </p>
+    </div>
 
-<div>
-    <h4>Contact</h4>
-    <hr />
-    <dl class="row">
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Name)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Name)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Email)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Email)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Phone)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Phone)
-        </dd>
-    </dl>
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <div class="contact-details-card">
+                <div class="contact-avatar">
+                    <i class="fas fa-user-circle"></i>
+                </div>
+
+                <div class="contact-info">
+                    <div class="info-item">
+                        <div class="info-label">
+                            <i class="fas fa-user me-2"></i>
+                            @Html.DisplayNameFor(model => model.Name)
+                        </div>
+                        <div class="info-value">
+                            @Html.DisplayFor(model => model.Name)
+                        </div>
+                    </div>
+
+                    <div class="info-item">
+                        <div class="info-label">
+                            <i class="fas fa-envelope me-2"></i>
+                            @Html.DisplayNameFor(model => model.Email)
+                        </div>
+                        <div class="info-value">
+                            <a href="mailto:@Model?.Email" class="email-link">
+                                @Html.DisplayFor(model => model.Email)
+                            </a>
+                        </div>
+                    </div>
+
+                    <div class="info-item">
+                        <div class="info-label">
+                            <i class="fas fa-phone me-2"></i>
+                            @Html.DisplayNameFor(model => model.Phone)
+                        </div>
+                        <div class="info-value">
+                            <a href="tel:@Model?.Phone" class="phone-link">
+                                @Html.DisplayFor(model => model.Phone)
+                            </a>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="action-section">
+                    <div class="row">
+                        <div class="col-md-6 mb-2">
+                            <div class="d-grid">
+                                <a asp-action="Edit" asp-route-id="@Model?.Id" class="btn btn-primary btn-lg">
+                                    <i class="fas fa-edit me-2"></i>
+                                    Editar Contacto
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="d-grid mt-3">
+                        <a asp-action="Index" class="btn btn-outline-secondary">
+                            <i class="fas fa-arrow-left me-2"></i>
+                            Volver a la Lista
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 </div>
-<div>
-    <a asp-action="Edit" asp-route-id="@Model?.Id">Editar</a> |
-    <a asp-action="Index">Volver a la Lista</a>
-</div>
+

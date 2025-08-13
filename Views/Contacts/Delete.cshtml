@@ -1,39 +1,74 @@
 @model SOS_Alert_App.Models.Contact
-
 @{
-    ViewData["Title"] = "Delete";
+    ViewData["Title"] = "Eliminar Contacto";
 }
 
-<h1>Borrar</h1>
+<div class="main-container">
+    <div class="text-center mb-4">
+        <h1 class="page-title text-danger">
+            <i class="fas fa-user-times me-3"></i>
+            Eliminar Contacto
+        </h1>
+        <p class="page-subtitle">
+            ¿Estás seguro de que quieres eliminar este contacto de emergencia?
+        </p>
+    </div>
 
-<h3>Estas seguro de eliminar este contacto?</h3>
-<div>
-    <h4>Contact</h4>
-    <hr />
-    <dl class="row">
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Name)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Name)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Email)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Email)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Phone)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Phone)
-        </dd>
-    </dl>
-    
-    <form asp-action="Delete">
-        <input type="hidden" asp-for="Id" />
-        <input type="submit" value="Delete" class="btn btn-danger" /> |
-        <a asp-action="Index">Volver a la Lista</a>
-    </form>
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <div class="delete-warning-card">
+                <div class="warning-icon">
+                    <i class="fas fa-exclamation-triangle"></i>
+                </div>
+
+                <div class="warning-message">
+                    <h4>¡Atención!</h4>
+                    <p>Esta acción no se puede deshacer. El contacto será eliminado permanentemente de tu lista de emergencia.</p>
+                </div>
+
+                <div class="contact-preview">
+                    <h5>Contacto a eliminar:</h5>
+                    <div class="contact-summary">
+                        <div class="summary-item">
+                            <strong>
+                                <i class="fas fa-user me-2"></i>
+                                @Html.DisplayNameFor(model => model.Name):
+                            </strong>
+                            @Html.DisplayFor(model => model.Name)
+                        </div>
+
+                        <div class="summary-item">
+                            <strong>
+                                <i class="fas fa-envelope me-2"></i>
+                                @Html.DisplayNameFor(model => model.Email):
+                            </strong>
+                            @Html.DisplayFor(model => model.Email)
+                        </div>
+
+                        <div class="summary-item">
+                            <strong>
+                                <i class="fas fa-phone me-2"></i>
+                                @Html.DisplayNameFor(model => model.Phone):
+                            </strong>
+                            @Html.DisplayFor(model => model.Phone)
+                        </div>
+                    </div>
+                </div>
+
+                <form asp-action="Delete" class="mt-4">
+                    <input type="hidden" asp-for="Id" />
+                    <div class="d-grid gap-2">
+                        <button type="submit" class="btn btn-danger btn-lg">
+                            <i class="fas fa-trash me-2"></i>
+                            Sí, Eliminar Contacto
+                        </button>
+                        <a asp-action="Index" class="btn btn-outline-secondary btn-lg">
+                            <i class="fas fa-arrow-left me-2"></i>
+                            Cancelar y Volver
+                        </a>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
 </div>

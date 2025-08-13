@@ -3,64 +3,165 @@
     ViewData["Title"] = "SOS Alert";
 }
 
-<h1 class="text-center text-danger">Alerta de Emergencia</h1>
+<div class="main-container">
+    <div class="text-center mb-4">
+        <h1 class="page-title text-danger">
+            <i class="fas fa-exclamation-triangle me-3"></i>
+            Alerta de Emergencia SOS
+        </h1>
+        <p class="page-subtitle">
+            Envía una alerta inmediata con tu ubicación a tus contactos de emergencia
+        </p>
+    </div>
 
-@if (TempData["Success"] != null)
-{
-    <div class="alert alert-success">@TempData["Success"]</div>
-}
 
-@if (TempData["Error"] != null)
-{
-    <div class="alert alert-danger">@TempData["Error"]</div>
-}
+    @if (TempData["Success"] != null)
+    {
+        <div class="alert alert-success alert-dismissible fade show" role="alert">
+            <i class="fas fa-check-circle me-2"></i>
+            @TempData["Success"]
+            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+        </div>
+    }
+    
+    @if (TempData["Error"] != null)
+    {
+        <div class="alert alert-danger alert-dismissible fade show" role="alert">
+            <i class="fas fa-exclamation-circle me-2"></i>
+            @TempData["Error"]
+            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+        </div>
+    }
 
-@if (!Model.Any())
-{
-    <p>No hay contactos disponibles. <a href="/Contacts/Create">Agrega uno aqui</a></p>
-}
-else
-{
-    <table class="table table-striped">
-        <thead>
-            <tr>
-                <th>Contact Name</th>
-                <th>Email</th>
-                <th>Phone</th>
-                <th>Action</th>
-            </tr>
-        </thead>
-        <tbody>
-            @foreach (var contact in Model)
-            {
-                <tr>
-                    <td>@contact.Name</td>
-                    <td>@contact.Email</td>
-                    <td>@contact.Phone</td>
-                    <td>
-                        <form method="post" asp-action="SendAlert" asp-route-contactId="@contact.Id" id="form_@contact.Id">
-                            <input type="hidden" name="location" id="location_@contact.Id" />
-                            <button type="button" class="btn btn-danger btn-lg" onclick="sendSOSWithLocation(@contact.Id)">
-                                Enviar SOS
-                            </button>
-                        </form>
-                    </td>
-                </tr>
-            }
-        </tbody>
-    </table>
-}
+    @if (!Model.Any())
+    {
+        <!-- Estado sin contactos -->
+        <div class="no-contacts-warning">
+            <div class="warning-icon">
+                <i class="fas fa-users-slash"></i>
+            </div>
+            <h3>No hay contactos de emergencia</h3>
+            <p>Necesitas agregar al menos un contacto de emergencia antes de poder enviar alertas SOS.</p>
+            
+            <div class="empty-actions">
+                <a asp-controller="Contacts" asp-action="Create" class="btn btn-primary-custom btn-lg">
+                    <i class="fas fa-user-plus me-2"></i>
+                    Agregar Primer Contacto
+                </a>
+                <a asp-controller="Contacts" asp-action="Index" class="btn btn-outline-primary btn-lg">
+                    <i class="fas fa-users me-2"></i>
+                    Ver Todos los Contactos
+                </a>
+            </div>
+        </div>
+    }
+    else
+    {
+        <!-- Botón SOS principal 
+        <div class="sos-main-section">
+            <div class="sos-button-container">
+                <button type="button" class="sos-button-main" onclick="sendEmergencyAlert()">
+                    <i class="fas fa-exclamation-triangle"></i>
+                    <span>ENVIAR SOS A TODOS</span>
+                </button>
+                <p class="sos-warning">
+                    <i class="fas fa-info-circle me-1"></i>
+                    Este botón enviará una alerta a TODOS tus contactos de emergencia
+                </p>
+            </div>
+        </div>
 
-<a href="/Alerts/History" class="btn btn-secondary">Ver historial</a>
+         Lista de contactos 
+        <div class="contacts-alert-section">
+            <h3 class="section-subtitle">
+                <i class="fas fa-users me-2"></i>
+                O enviar alerta a un contacto específico
+            </h3>
+        -->   
+            <div class="contacts-alert-table">
+                <table class="table table-hover mb-0">
+                    <thead class="table-header">
+                        <tr>
+                            <th><i class="fas fa-user me-2"></i>Contacto</th>
+                            <th><i class="fas fa-envelope me-2"></i>Email</th>
+                            <th><i class="fas fa-phone me-2"></i>Teléfono</th>
+                            <th><i class="fas fa-paper-plane me-2"></i>Acción</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var contact in Model)
+                        {
+                            <tr>
+                                <td class="contact-name">@contact.Name</td>
+                                <td class="contact-email">@contact.Email</td>
+                                <td class="contact-phone">@contact.Phone</td>
+                                <td>
+                                    <form method="post" asp-action="SendAlert" asp-route-contactId="@contact.Id" id="form_@contact.Id" class="d-inline">
+                                        <input type="hidden" name="location" id="location_@contact.Id" />
+                                        <button type="button" class="btn btn-danger btn-sos" onclick="sendSOSWithLocation(@contact.Id)">
+                                            <i class="fas fa-exclamation-triangle me-1"></i>
+                                            <span class="btn-text">Enviar SOS</span>
+                                            <span class="btn-loading" style="display: none;">
+                                                <i class="fas fa-spinner fa-spin me-1"></i>
+                                                Ubicando...
+                                            </span>
+                                        </button>
+                                    </form>
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+
+        <!-- Información adicional -->
+        <div class="alert-info-section">
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="info-card">
+                        <h4><i class="fas fa-map-marker-alt me-2"></i>Ubicación GPS</h4>
+                        <p>Tu ubicación exacta será incluida automáticamente en cada alerta para facilitar la asistencia.</p>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="info-card">
+                        <h4><i class="fas fa-clock me-2"></i>Respuesta Rápida</h4>
+                        <p>Las alertas se envían inmediatamente. Tus contactos recibirán el mensaje en segundos.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    }
+
+    <!-- Enlaces adicionales -->
+    <div class="additional-links">
+        <div class="row">
+            <div class="col-md-6">
+                <a asp-action="History" class="btn btn-outline-secondary btn-lg w-100">
+                    <i class="fas fa-history me-2"></i>
+                    Ver Historial de Alertas
+                </a>
+            </div>
+            <div class="col-md-6">
+                <a asp-controller="Contacts" asp-action="Index" class="btn btn-outline-primary btn-lg w-100">
+                    <i class="fas fa-users-cog me-2"></i>
+                    Gestionar Contactos
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
 
 <script>
     function sendSOSWithLocation(contactId) {
-
-        const button = document.querySelector(`button[onclick="sendSOSWithLocation(${contactId})"]`);
-        const originalText = button.textContent;
-        button.textContent = "Getting location...";
+        const button = document.querySelector(`#form_${contactId} button`);
+        const btnText = button.querySelector('.btn-text');
+        const btnLoading = button.querySelector('.btn-loading');
+        
+        btnText.style.display = 'none';
+        btnLoading.style.display = 'inline';
         button.disabled = true;
-
+        
         if (navigator.geolocation) {
             navigator.geolocation.getCurrentPosition(
                 function(position) {
@@ -68,21 +169,22 @@ else
                     const lat = position.coords.latitude;
                     const lng = position.coords.longitude;
                     const location = `${lat}, ${lng}`;
-
+                    
                     // Poner la ubicación en el campo hidden
                     document.getElementById(`location_${contactId}`).value = location;
-
+                    
                     // Enviar el formulario
                     document.getElementById(`form_${contactId}`).submit();
                 },
                 function(error) {
                     // Error o usuario negó el permiso
                     console.log("Geolocation error:", error);
-
+                    
                     // Restaurar botón y enviar sin ubicación
-                    button.textContent = originalText;
+                    btnText.style.display = 'inline';
+                    btnLoading.style.display = 'none';
                     button.disabled = false;
-
+                    
                     document.getElementById(`location_${contactId}`).value = "Ubicación no disponible";
                     document.getElementById(`form_${contactId}`).submit();
                 },
@@ -94,11 +196,13 @@ else
             );
         } else {
             // Navegador no soporta geolocalización
-            button.textContent = originalText;
+            btnText.style.display = 'inline';
+            btnLoading.style.display = 'none';
             button.disabled = false;
-
+            
             document.getElementById(`location_${contactId}`).value = "Geolocalización no soportada";
             document.getElementById(`form_${contactId}`).submit();
         }
     }
+
 </script>
